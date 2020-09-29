@@ -1,0 +1,45 @@
+#So first I used the example of the vector and the cache of the mean.
+#Using the same structure I just manipulate the terms and functions in the example to apply them to a matrix.
+
+#In te first part I define the argument in 'function()' as a matrix because now I want to take a matrix and get the inverse of it. 
+#This fuction has the same structure as the example, I want to create a kind of list where I can find different functions to set and get the values of the matrix and te inverse. 
+
+makeCacheMatrix <- function(m = matrix()) { 
+  inv <- NULL 
+  set <- function(c) { 
+    m <<- c 
+    inv <<- NULL
+  } 
+  get <- function() m 
+  setinv <- function(solve) inv <<- solve 
+  getinv <- function() inv 
+  list(set = set, get = get,setinv = setinv,getinv = getinv) 
+  }
+
+#Here I asign the function to a new object, define the new matrix as m, set the value m for the function, get the value of m and the set the value of the inverse
+#only if we previously have calculated it, if it isn't then it will print a NULL value when the 'matrix1$getinv()' part runs.
+
+matrix1 <- makeCacheMatrix()
+m<-matrix(c(1,2,3,2,4,5,7,9,2),3,3)
+matrix1$set(m)
+matrix1$get()
+matrix1$setinv()
+matrix1$getinv() 
+
+#Then I check if the inverse of the matrix has been calculated by using a for. If the function doesn't find the inverse matrix then it proceed to calculate it.
+cachemean <- function(m, ...) {
+  inv <- m$getinv() 
+  if(!is.null(inv)) {  
+    message("getting cached data") 
+    return(inv) 
+  }
+  matrix2 <- m$get() 
+  inv <- solve(matrix2)
+  m$setinv(inv) 
+  inv
+}
+
+#Finally you can see the final result of the function.
+#We have to remember that if you want to calculate the inverse of a matrix then the determinant has to be different from zero.
+
+cachemean(matrix1)
